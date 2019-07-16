@@ -21,6 +21,9 @@ class Game:
     pxnumber = ' '
     pxcolor = ' '
     pxbetcolor = " "
+    gamepicker = ' '
+    gameapprove = " "
+
 
     def __init__(self):
         pass
@@ -83,19 +86,26 @@ class Game:
 
 #Gambling Mode Picker v1
 
-        print("Do you want to gamble on a color ? [Red|Black|No] ")
-        self.pxcolor = input()
-        for self.pxcolor in colorlist:
-            if (self.pxcolor == "red, Red"):
-                print("How many tokens do you want to gamble on Red ?")
-                self.pxbetcolor = input()
-            elif (self.pxcolor == "black, Black"):
-                print("How many tokens do you want to gamble on Black ?")
-                self.pxbetcolor = input()
-            else:
-                self.pxcolor = "no, No"
-                print("Alright no color-gambling this time")
-            break
+        print("Which format do you want to gamble on ? ")
+        print(" [1] Color (1:2) | [2] Even/Odd (1:2) | [3] Dozen (1:3) | [4] Sixt (1:6) | [5] Square (1:9) | [6] Double (1:18)")
+        self.gamepicker = input()
+        if self.gamepicker = str[1]:
+            colorbet()
+        elif self.gamepicker = str[2]:
+            evenoddbet()
+        elif self.gamepicker = str[3]:
+            dozenbet()
+        elif self.gamepicker = str[4]:
+            sixtbet()
+        elif self.gamepicker = str[5]:
+            squarebet()
+        elif self.gamepicker = str[6]:
+            doublebet()
+        else:
+            print("Okay, I'm assuming that you're gambling on a single number then ;) ")
+
+        print("Do you want to gamble on anything else ? [y/n]")
+        self.gameapprove = input()
 
 #Game Function
 
