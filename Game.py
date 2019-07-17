@@ -1,17 +1,16 @@
 import json
 import random
 import Depot
+import Modesfunc
 from Depot import cword
 from Depot import Bannounce
 from Depot import sword
 from Depot import bonuses
-from Depot import RouletteCases
-from Depot import colorlist
+from Depot import Case
+from Depot import rouletteCases
+from Depot import list_of_cases
 
-
-#GUESS&OR&BET
-#SELECT&A&BORING&LANGUAGE&GAME
-#OR&PLAY&AT&LE&CASINO
+#yeezus casino
 
 class Game:
     bet = 0
@@ -21,6 +20,9 @@ class Game:
     pxnumber = ' '
     pxcolor = ' '
     pxbetcolor = " "
+    gamepicker = ' '
+    gameapprove = " "
+
 
     def __init__(self):
         pass
@@ -75,7 +77,7 @@ class Game:
         self.pxnumber = input()
         while int(self.pxnumber) >= 0:
             if 0 <= int(self.pxnumber) < 37:
-                print("You gambled on the number " + str(self.pxnumber))
+                print("You gambled on number " + str(self.pxnumber))
             else:
                 print(" You must chose a number between 0 and 36 ")
                 self.pxnumber = input()
@@ -83,29 +85,36 @@ class Game:
 
 #Gambling Mode Picker v1
 
-        print("Do you want to gamble on a color ? [Red|Black|No] ")
-        self.pxcolor = input()
-        for self.pxcolor in colorlist:
-            if (self.pxcolor == "red, Red"):
-                print("How many tokens do you want to gamble on Red ?")
-                self.pxbetcolor = input()
-            elif (self.pxcolor == "black, Black"):
-                print("How many tokens do you want to gamble on Black ?")
-                self.pxbetcolor = input()
-            else:
-                self.pxcolor = "no, No"
-                print("Alright no color-gambling this time")
-            break
+        print("Which format do you want to gamble on ? ")
+        print(" [1] Color (1:2) | [2] Even/Odd (1:2) | [3] Dozen (1:3) | [4] Sixt (1:6) | [5] Square (1:9) | [6] Double (1:18)")
+        self.gamepicker = input()
+        if self.gamepicker == str[1]:
+            colorbet()
+        elif self.gamepicker == str[2]:
+            evenoddbet()
+        elif self.gamepicker == str[3]:
+            dozenbet()
+        elif self.gamepicker == str[4]:
+            sixtbet()
+        elif self.gamepicker == str[5]:
+            squarebet()
+        elif self.gamepicker == str[6]:
+            doublebet()
+        else:
+            print("Okay, I'm assuming that you're gambling on a single number then ;) ")
+
+        print("Do you want to gamble on anything else ? [y/n]")
+        self.gameapprove = input()
 
 #Game Function
 
     def guess_or_bet(self):
         print("Guess or Bet ?")
-        pick = input()
+        pick = input().lower()
 
         #Player selected Guess---------------------------------------------------------------------------------------------------
 
-        if pick == "Guess":
+        if pick == "guess":
             for x in cword:
                 if x == "cannabise":
                     print("thats illegal")
@@ -125,7 +134,7 @@ class Game:
 
         #Player selected Bet-----------------------------------------------------------------------------------------------------
 
-        elif pick == "Bet":
+        elif pick == "bet":
             print("Please type your starting bet [Up to 100 Tokens]")
             bet = input()
             bet = float(bet)
