@@ -9,6 +9,8 @@ from Depot import bonuses
 from Depot import Case
 from Depot import rouletteCases
 from Depot import list_of_cases
+from Modesfunc import pxmisebet
+from Modesfunc import colorpicker
 
 #yeezus casino
 
@@ -27,21 +29,27 @@ class Game:
     def __init__(self):
         pass
 
-#Winning Number Generator
+    def mise(self):
+        """Retrieve credits when tokens are gambled"""
+
+        if int(pxmisebet) > 0:
+            self.bet = float(self.bet) - float(pxmisebet)
+        else: 
+            return 'error 400'
 
     def usround(self):
-        self.winoperator = random.choice(RouletteCases)
+        """Winning Number Generator"""
+
+        self.winoperator = random.choice(rouletteCases)
         print("The winning number is :" + str(self.winoperator))
         if int(self.winoperator) == int(self.pxnumber):
             print("Congrats ! Here's your money")
         else:
             print("Better luck next time !")
 
-#Round Counter v1
-
     def newRound(self):
-        #Round addr
-        #Minbet increasing
+        """Round Counter v1"""
+
         rx = 0
         rx += 1
         if rx == 1:
@@ -55,9 +63,9 @@ class Game:
         Gameinfo = "Current Game Stats: Round[ {} ] | Min.Bet[ {} ] | Player[ {} ] | Credits[ {} ]"
         print(Gameinfo.format(rx, self.mbx, px, self.bet))
 
-#Current Game Amount to Bet
-
     def currentRound(self):
+        """Current Game Amount to Bet"""
+
         print("How many tokens are you gonna Bet this time ?")
         pxbet = input()
         pxbet = float(pxbet)
@@ -106,9 +114,9 @@ class Game:
         print("Do you want to gamble on anything else ? [y/n]")
         self.gameapprove = input()
 
-#Game Function
-
     def guess_or_bet(self):
+        """Load Game Function"""
+
         print("Guess or Bet ?")
         pick = input().lower()
 
