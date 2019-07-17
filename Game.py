@@ -27,7 +27,8 @@ class Game:
     number = 0
     context = ""
 
-    def __init__(self):
+    def __init__(self, number):
+        self.number = number
         pass
 
     def credits_checker(self):
@@ -76,11 +77,11 @@ class Game:
         said number color, evenodd, row and column"""
         self.winoperator = int(random.choice(rouletteCases))
         print("The winning number is : " + str(self.winoperator))
-        setattr(self.winoperator, Game, self.number)
-        Case.is_even(self.winoperator)
-        Case.color(self.winoperator)
-        Case.row(self.winoperator)
-        Case.column(self.winoperator)
+        #setattr(self.winoperator, Game, self.number)
+        #Case.is_even(self.winoperator)
+        #Case.color(self.winoperator)
+        #Case.row(self.winoperator)
+        #Case.column(self.winoperator)
         #Case stats checker ends^
         if self.context == "singlenumber":
             if int(self.winoperator) == int(self.pxnumber):
@@ -91,6 +92,7 @@ class Game:
             Case.color(self.winoperator)
         else:
             print("Unexpected Error")
+            return 'Error404'
 
 
     def newRound(self):
@@ -193,7 +195,7 @@ print("Hey Player, what is your name ?")
 px = "    "
 px = input()
 if px.strip():
-    game = Game()
+    game = Game(0)
     game.guess_or_bet()
 else:
    print("Invalid Player Name")

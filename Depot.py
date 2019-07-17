@@ -14,9 +14,13 @@ class Case:
     """Cases properties"""
 
     number = 0
+    x = number
 
     def __init__(self, number):
         self.number = number
+
+    def __repr__(self):
+        return "<"
 
     def color(self):
         """Define number's color"""
@@ -68,3 +72,5 @@ class Case:
             return 3
 
 list_of_cases = [Case(x) for x in range(0, 37)]
+c = list_of_cases
+print(c)
