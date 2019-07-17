@@ -25,9 +25,9 @@ class Game:
     pxbet = ' '
     checked = 1
     number = 0
+    context = ""
 
-    def __init__(self, number):
-        self.number = number
+    def __init__(self):
         pass
 
     def credits_checker(self):
@@ -41,6 +41,7 @@ class Game:
 
     def colorpicker(self):
         """Gamble on colors"""
+        self.context = "color"
         colors = {
             "red": "Red",
             "black": "Black"
@@ -73,17 +74,23 @@ class Game:
         """Winning Number Generator
         Generates a random number then calculates
         said number color, evenodd, row and column"""
-        self.number = int(random.choice(rouletteCases))
-        print("The winning number is :" + str(self.number))
-        Case.is_even(self.number)
-        Case.color(self.number)
-        Case.row(self.number)
-        Case.column(self.number)
+        self.winoperator = int(random.choice(rouletteCases))
+        print("The winning number is : " + str(self.winoperator))
+        setattr(self.winoperator, Game, self.number)
+        Case.is_even(self.winoperator)
+        Case.color(self.winoperator)
+        Case.row(self.winoperator)
+        Case.column(self.winoperator)
         #Case stats checker ends^
-        if int(self.number) == int(self.pxnumber):
-            print("Congrats ! Here's your money")
+        if self.context == "singlenumber":
+            if int(self.winoperator) == int(self.pxnumber):
+                print("Congrats ! Here's your money")
+            else:
+                print("Better luck next time !")
+        elif self.context == "color":
+            Case.color(self.winoperator)
         else:
-            print("Better luck next time !")
+            print("Unexpected Error")
 
 
     def newRound(self):
