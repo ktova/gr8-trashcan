@@ -9,7 +9,6 @@ from Depot import Case
 from Depot import rouletteCases
 from Depot import list_of_cases
 
-
 #yeezus casino
 
 class Game:
@@ -25,8 +24,10 @@ class Game:
     pxmisebet = 0
     pxbet = ' '
     checked = 1
+    number = 0
 
-    def __init__(self):
+    def __init__(self, number):
+        self.number = number
         pass
 
     def credits_checker(self):
@@ -36,6 +37,7 @@ class Game:
         else:
             self.checked = 1
             return self.checked
+
 
     def colorpicker(self):
         """Gamble on colors"""
@@ -53,10 +55,11 @@ class Game:
 
         self.credits_checker()
         if self.checked == 1:
-             print("You gambled" + str(self.pxmisebet))
+             print("You gambled " + str(self.pxmisebet) + " tokens")
              return self.pxmisebet
         else:
              print("You can't bet more than " + str(self.bet) + " tokens")
+
 
     def mise(self):
         """Retrieve credits when tokens are gambled"""
@@ -65,15 +68,23 @@ class Game:
         else: 
             return 'error 400'
 
-    def usround(self):
-        """Winning Number Generator"""
 
-        self.winoperator = random.choice(rouletteCases)
-        print("The winning number is :" + str(self.winoperator))
-        if int(self.winoperator) == int(self.pxnumber):
+    def usround(self):
+        """Winning Number Generator
+        Generates a random number then calculates
+        said number color, evenodd, row and column"""
+        self.number = int(random.choice(rouletteCases))
+        print("The winning number is :" + str(self.number))
+        Case.is_even(self.number)
+        Case.color(self.number)
+        Case.row(self.number)
+        Case.column(self.number)
+        #Case stats checker ends^
+        if int(self.number) == int(self.pxnumber):
             print("Congrats ! Here's your money")
         else:
             print("Better luck next time !")
+
 
     def newRound(self):
         """Round Counter v1"""
@@ -91,6 +102,7 @@ class Game:
         Gameinfo = "Current Game Stats: Round[ {} ] | Min.Bet[ {} ] | Player[ {} ] | Credits[ {} ]"
         print(Gameinfo.format(rx, self.mbx, px, self.bet))
 
+
     def currentRound(self):
         """Current Game Amount to Bet"""
 #Gambling Mode Picker v1
@@ -104,6 +116,7 @@ class Game:
             else:
                 print("Please chose a valid Gamemode")
                 self.gamepicker = input()
+
 
     def guess_or_bet(self):
         """Load Game Function"""
@@ -120,14 +133,6 @@ class Game:
                     continue
                 else:
                     print(x)
-            print("What's Illegal ?")
-            x = input()
-            while x != sword:
-                print("Not Correct. Try Again:")
-                x = input()
-            if x == sword:
-                print("Correct ! The full list was :")
-                print(cword)
 
         #Player selected Guess---------------------------------------------------------------------------------------------------
 
@@ -163,7 +168,7 @@ class Game:
 
             self.newRound()   
             self.currentRound()
-            #self.usround()
+            self.usround()
 
         #Invalid Selection
         
@@ -173,6 +178,7 @@ class Game:
         #Load Function
 
      #Player selected Bet-----------------------------------------------------------------------------------------------------
+
 
 #Setup
 
