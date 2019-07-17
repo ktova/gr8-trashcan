@@ -1,7 +1,7 @@
 cword = ["cobra", "cacao", "cocaine", "cannes", "cannabise", "camus"]
 sword = "cannabis"
 
-Bannounce = "We added a little welcome bonus, here is your new starting bet :"
+Bannounce = "We added a little welcome bonus, here is your new starting Credits :"
 
 #List of every playable numbers from the roulette - equivalent de .append x dans roulettecases
 rouletteCases = [

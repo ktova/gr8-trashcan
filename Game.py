@@ -1,7 +1,6 @@
 import json
 import random
 import Depot
-import Modesfunc
 from Depot import cword
 from Depot import Bannounce
 from Depot import sword
@@ -9,8 +8,7 @@ from Depot import bonuses
 from Depot import Case
 from Depot import rouletteCases
 from Depot import list_of_cases
-from Modesfunc import pxmisebet
-from Modesfunc import colorpicker
+
 
 #yeezus casino
 
@@ -24,16 +22,46 @@ class Game:
     pxbetcolor = " "
     gamepicker = ' '
     gameapprove = " "
-
+    pxmisebet = 0
+    pxbet = ' '
+    checked = 1
 
     def __init__(self):
         pass
 
+    def credits_checker(self):
+        if float(self.pxmisebet) > float(self.bet) :
+            self.checked = 0
+            return self.checked
+        else:
+            self.checked = 1
+            return self.checked
+
+    def colorpicker(self):
+        """Gamble on colors"""
+        colors = {
+            "red": "Red",
+            "black": "Black"
+        }
+        print("What color do you want to gamble on ? [ red | black ]")
+        pxcolor = input().lower()
+        try:
+            print(f"How many tokens do you want to gamble on {colors[pxcolor]} ?")
+            self.pxmisebet = float(input())
+        except:
+            print("Error, that's not a valid color")
+
+        self.credits_checker()
+        if self.checked == 1:
+             print("You gambled" + str(self.pxmisebet))
+             return self.pxmisebet
+        else:
+             print("You can't bet more than " + str(self.bet) + " tokens")
+
     def mise(self):
         """Retrieve credits when tokens are gambled"""
-
-        if int(pxmisebet) > 0:
-            self.bet = float(self.bet) - float(pxmisebet)
+        if float(self.pxbet) > 0:
+            self.bet = float(self.bet) - float(self.pxbet)
         else: 
             return 'error 400'
 
@@ -65,54 +93,17 @@ class Game:
 
     def currentRound(self):
         """Current Game Amount to Bet"""
-
-        print("How many tokens are you gonna Bet this time ?")
-        pxbet = input()
-        pxbet = float(pxbet)
-        while float(pxbet) >= 0.0 :
-            if float(pxbet) < self.mbx:
-                print(" In order to play, Please respect the minimum bet rule ")
-                pxbet = input()
-            elif float(pxbet) > float(self.bet):
-                print(" Thats way too much for your wallet sir ")
-                pxbet = input()
-            else:
-                self.bet = float(self.bet) - float(pxbet)
-                print("You gambled " + str(pxbet) + " tokens this round")
-                break
-
-        print("Which number do you want to gamble on ?")
-        self.pxnumber = input()
-        while int(self.pxnumber) >= 0:
-            if 0 <= int(self.pxnumber) < 37:
-                print("You gambled on number " + str(self.pxnumber))
-            else:
-                print(" You must chose a number between 0 and 36 ")
-                self.pxnumber = input()
-            break
-
 #Gambling Mode Picker v1
-
         print("Which format do you want to gamble on ? ")
         print(" [1] Color (1:2) | [2] Even/Odd (1:2) | [3] Dozen (1:3) | [4] Sixt (1:6) | [5] Square (1:9) | [6] Double (1:18)")
         self.gamepicker = input()
-        if self.gamepicker == str[1]:
-            colorbet()
-        elif self.gamepicker == str[2]:
-            evenoddbet()
-        elif self.gamepicker == str[3]:
-            dozenbet()
-        elif self.gamepicker == str[4]:
-            sixtbet()
-        elif self.gamepicker == str[5]:
-            squarebet()
-        elif self.gamepicker == str[6]:
-            doublebet()
-        else:
-            print("Okay, I'm assuming that you're gambling on a single number then ;) ")
-
-        print("Do you want to gamble on anything else ? [y/n]")
-        self.gameapprove = input()
+        for self.gamepicker in range(1,7):
+            if self.gamepicker == 1:
+                self.colorpicker()
+                break
+            else:
+                print("Please chose a valid Gamemode")
+                self.gamepicker = input()
 
     def guess_or_bet(self):
         """Load Game Function"""
@@ -172,7 +163,7 @@ class Game:
 
             self.newRound()   
             self.currentRound()
-            self.usround()
+            #self.usround()
 
         #Invalid Selection
         

@@ -2,54 +2,45 @@ import json
 import python1
 from python1 import cword, Bannounce, sword, bonuses
 
+gamepicker  
 
-def guess_or_bet():
-    print("Guess or Bet ?")
-    pick = input()
+        if self.gamepicker == str[1]:
+            colorbet()
+        elif self.gamepicker == str[2]:
+            evenoddbet()
+        elif self.gamepicker == str[3]:
+            dozenbet()
+        elif self.gamepicker == str[4]:
+            sixtbet()
+        elif self.gamepicker == str[5]:
+            squarebet()
+        elif self.gamepicker == str[6]:
+            doublebet()
 
-    # Player selected Guess
 
-    if pick == "Guess":
-        for x in cword:
-            if x == "cannabise":
-                print("thats illegal")
-                continue
+
+
+        print("How many tokens are you gonna Bet this time ?")
+        pxbet = input()
+        pxbet = float(pxbet)
+        while float(pxbet) >= 0.0 :
+            if float(pxbet) < self.mbx:
+                print(" In order to play, Please respect the minimum bet rule ")
+                pxbet = input()
+            elif float(pxbet) > float(self.bet):
+                print(" Thats way too much for your wallet sir ")
+                pxbet = input()
             else:
-                print(x)
-        print("What's Illegal ?")
-        x = input()
-        while x != sword:
-            print("Not Correct. Try Again:")
-            x = input()
-        if x == sword:
-            print("Correct ! The full list was :")
-            print(cword)
+                self.bet = float(self.bet) - float(pxbet)
+                print("You gambled " + str(pxbet) + " tokens this round")
+                break
 
-    # Player selected Bet
-
-    elif pick == "Bet":
-        print("lets do maths, please type your starting bet [10|25|50|100]")
-        bet = m
-        while m <= 25 :
-                 bonuses = bonuses[0]
-         if 25 < m <= 50:
-                 bonuses = bonuses[1]
-            elif 50 < m <= 75:
-                 bonuses = bonuses[2]
-            elif 75 < m <= 100:
-                 bonuses = bonuses[3]
+        print("Which number do you want to gamble on ?")
+        self.pxnumber = input()
+        while int(self.pxnumber) >= 0:
+            if 0 <= int(self.pxnumber) < 37:
+                print("You gambled on number " + str(self.pxnumber))
             else:
-                 bonuses = bonuses[4]     
- 
-        bet = input()
-        
-        else:
-            print("Don't mess with the casino, you're out")
-
-    # Invalid Selection
-
-    else:
-        print("Enter a valid pick")
-
-
-guess_or_bet()
+                print(" You must chose a number between 0 and 36 ")
+                self.pxnumber = input()
+            break
