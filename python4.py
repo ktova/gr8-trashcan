@@ -1,4 +1,7 @@
-import json
+import Depot
+from Depot import Case
+
+"""import json
 import python1
 from python1 import cword, Bannounce, sword, bonuses
 
@@ -42,4 +45,15 @@ gamepicker
             else:
                 print(" You must chose a number between 0 and 36 ")
                 self.pxnumber = input()
-            break
+            break"""
+
+def testx():
+    number = 1
+    Case.color(number)
+    if True:
+        print("rouge")
+    else:
+        print("black")
+
+
+testx() 

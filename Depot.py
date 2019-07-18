@@ -14,15 +14,13 @@ class Case:
     """Cases properties"""
 
     number = 0
-    x = number
+    d = 1
 
     def __init__(self, number):
         self.number = number
 
-# + ", type: " + str(self.is_even) + ", from column number " + str(self.column) + " and row number " + str(self.row) 
-
-    #def __str__(self):
-        #return "<__main__.Case: color = " + str(self.color) + ">" 
+    def __repr__(self):
+        return repr(self.color)
 
     def color(self):
         """Define number's color"""
@@ -41,7 +39,7 @@ class Case:
             or (self.number >= 29 and self.number <= 36)
         ):
             if self.number % 2 == 0:
-                return "red"
+                return "red" 
             else:
                 return "black"
 
@@ -73,6 +71,8 @@ class Case:
         elif self.number >= 25 and self.number <= 36:
             return 3
 
+
 list_of_cases = [Case(x) for x in range(0, 37)]
-c = list_of_cases[1]
-print(c)
+
+
+

@@ -20,16 +20,18 @@ class Game:
     pxnumber = ' '
     pxcolor = ' '
     pxbetcolor = " "
+    pxhalf = " "
     gamepicker = ' '
     gameapprove = " "
     pxmisebet = 0
     pxbet = ' '
+    halfbet = 0
     checked = 1
     number = 0
-    context = ""
-    multipler = 0
-    powerbet = 0
-    gain = 0
+    context = " "
+    multipler = 1.0
+    powerbet = 1.0
+    gain = 1.0
     endround = 1
 
     def __init__(self, number):
@@ -37,32 +39,40 @@ class Game:
         pass
 
     def roundwin(self):
+        """Return win"""
         self.endround = 1
-        if self.multipler == 2:
-            self.powerbet == 2
-            self.gain = float(self.pxmisebet) * float(self.powerbet)
+        #Gain for 2x multiplers
+        if int(self.multipler) == 2:
+            self.gain = float(self.pxmisebet) * int(self.multipler)
             self.bet = float(self.bet) + float(self.gain)
-        elif self.multipler == 3:
-            self.powerbet == 3
-            self.gain = float(self.pxmisebet) * float(self.powerbet)
-            self.bet = float(self.bet) + float(self.gain)
-        elif self.multipler == 36:
-            self.powerbet == 36
-            self.gain = float(self.pxmisebet) * float(self.powerbet)
-            self.bet = float(self.bet) + float(self.gain)
+            print(self.pxmisebet)
+            print(self.gain)
+        #Gain for 3x multiplers
+        elif int(self.multipler) == 3:
+            self.gain = float(self.pxmisebet) * float(self.multipler)
+            self.bet = self.bet + self.gain
+        #Gain for single numbers 0 included
+        elif int(self.multipler) == 36:
+            self.gain = float(self.pxmisebet) * float(self.multipler)
+            self.bet = self.bet + self.gain
         else:
+            print(self.multipler)
+            print(self.powerbet)
+            print(self.gain)
+            print("Error distributing the gains")
             return 'error invalid win'
         print("Congrats you won this round !")
         print("Your new amount of credits is : " + str(self.bet))
 
     def roundloss(self):
+        """Return loss"""
         self.endround = 1
         self.bet = float(self.bet) - float(self.pxmisebet)
         print("Unlucky, you did bet on the wrong number. Better luck next time !")
         print("Your new amount of credits is : " + str(self.bet))
-        print(self.endround)
 
     def credits_checker(self):
+        """Checks if player is allowed to bet"""
         if float(self.pxmisebet) > float(self.bet) :
             self.checked = 0
             return self.checked
@@ -70,10 +80,35 @@ class Game:
             self.checked = 1
             return self.checked
 
+    def halfpicker(self):
+        """Gamble on the first 18s number or the last 18s"""
+        self.context = "half"
+        self.multipler = 2.0
+        halfies = {
+            "first" : "first half",
+            "last" : "last half"
+        }
+        print("Do you want to gamble on the first half (1-18) numbers or the last half (19-36) ?")
+        self.pxhalf = str(input().lower())
+        while (self.pxhalf) != 0:
+            if self.pxhalf == "first":
+                self.halfbet = 1
+                print(f"How many tokens are you gonna bet on the {halfies[self.pxhalf]} ?")
+                self.confirmise()
+                break
+            elif self.pxhalf == "last":
+                self.halfbet = 2
+                print(f"How many tokens are you gonna bet on the {halfies[self.pxhalf]} ?")
+                self.confirmise()
+                break
+            else:
+                print("Please select a valid half")
+                self.pxhalf = str(input().lower())
 
     def singlenumpicker(self):
         """Gamble on single numbers"""
         self.context = "singlenumber"
+        self.multipler == 36.0
         print("Which number do you want to gamble on ?")
         self.pxnumber = input()
         while int(self.pxnumber) >= 0:
@@ -83,11 +118,13 @@ class Game:
                 print(" You must chose a number between 0 and 36 ")
                 self.pxnumber = input()
             break
+        print(f"How many tokens are you gonna bet on {[self.pxnumber]}")
         self.confirmise()
 
     def colorpicker(self):
         """Gamble on colors"""
         self.context = "color"
+        self.multipler == 2
         colors = {
             "red": "Red",
             "black": "Black"
@@ -111,22 +148,20 @@ class Game:
 
     def confirmise(self):
     #"""Check if player respects betting rules"""
-        print("How many tokens are you gonna bet ?")
-        pxmisebet = float(input())
-        while float(pxmisebet) >= 0.0 :
-            if float(pxmisebet) < self.mbx:
+        self.pxmisebet = float(input())
+        while float(self.pxmisebet) >= 0.0 :
+            if float(self.pxmisebet) < self.mbx:
                 print(" In order to play, Please respect the minimum bet rule ")
                 pxmisebet = input()
-            elif float(pxmisebet) > float(self.bet):
+            elif float(self.pxmisebet) > float(self.bet):
                 print(" Thats way too much for your wallet sir ")
-                pxmisebet = input()
+                self.pxmisebet = input()
             else:
-                self.bet = float(self.bet) - float(pxmisebet)
-                print("You gambled " + str(pxmisebet) + " tokens this round")
+                self.bet = float(self.bet) - float(self.pxmisebet)
+                print("You gambled " + str(self.pxmisebet) + " tokens this round")
                 break  
         self.credits_checker()
         self.mise()      
-
 
     def mise(self):
         """Retrieve credits when tokens are gambled"""
@@ -142,8 +177,7 @@ class Game:
         said number color, evenodd, row and column"""
         self.winoperator = int(random.choice(rouletteCases))
         print("The winning number is : " + str(self.winoperator))
-        #setattr(self.winoperator, Game, self.number)
-        #Case.is_even(self.winoperator)
+        #Case.color(self.winoperator)
         #Case.color(self.winoperator)
         #Case.row(self.winoperator)
         #Case.column(self.winoperator)
@@ -153,11 +187,31 @@ class Game:
                 self.roundwin()
             else:
                 self.roundloss()
+        elif self.context == "half":
+            if self.halfbet == 1:
+                if 1 <= int(self.winoperator) < 19:
+                    self.roundwin()
+                elif int(self.winoperator) == 0:
+                    self.pxmisebet / 2
+                    self.roundloss()
+                else:
+                    self.roundloss()
+            elif self.halfbet == 2:
+                if 18 < int(self.winoperator) < 37:
+                    self.roundwin()
+                elif int(self.winoperator) == 0:
+                    self.pxmisebet / 2
+                    self.roundloss()
+                else:
+                    self.roundloss()
+            else:
+                print("Unexpected Error")
+                return 'Error411'
         #elif self.context == "color":
             #Case.color(self.winoperator)
         else:
             print("Unexpected Error")
-            return 'Error404'
+            return 'Error411'
         
 
     def newRound(self):
@@ -173,14 +227,22 @@ class Game:
         else:
             self.mbx += 2.0    
         Gameinfo = "Current Game Stats: Round[ {} ] | Min.Bet[ {} ] | Player[ {} ] | Credits[ {} ]"
+        print('---------------------------------------------------------------------------------')
         print(Gameinfo.format(self.rx, self.mbx, px, self.bet))
+        print('---------------------------------------------------------------------------------')
 
 
     def currentRound(self):
         """Current Game Amount to Bet"""
 #Gambling Mode Picker v1
         print("Which format do you want to gamble on ? ")
-        print(" [1] Color (1:2) | [2] Even/Odd (1:2) | [3] Dozen (1:3) | [4] Sixt (1:6) | [5] Square (1:9) | [6] Double (1:18) | [7] Single (1:36) ")
+        print(" [1] Single (1:36) | [2] Half (1:2) | [x] Even/Odd (1:2) | [x] Dozen (1:3) | [x] Sixt (1:6) | [x] Square (1:9) | [x] Double (1:18) | [x] Color (1:2) |")
+        print('----------------------------------------------------------------------------------------------------------------------------------------------')
+        if self.bet < self.mbx:
+            print("Seems like you don't have enough tokens to play")
+            print("You've lost today.")
+        else:
+            pass
         self.gamepicker = str(input()).lower()
         while self.gamepicker is not 'null':
             if self.gamepicker == "color":
@@ -188,6 +250,9 @@ class Game:
                 break
             elif self.gamepicker == "single":
                 self.singlenumpicker()
+                break
+            elif self.gamepicker == "half":
+                self.halfpicker()
                 break
             else:
                 print(self.gamepicker)
@@ -241,7 +306,7 @@ class Game:
             else:
                 print("Messing with the ksino ? Try beating us bigboy")
                 self.bet = 1
-
+           
             while self.endround in range(0,2):
                 if self.endround == 1:
                     self.newRound()
@@ -268,7 +333,10 @@ print("Hey Player, what is your name ?")
 px = "    "
 px = input()
 if px.strip():
-    game = Game(0)
+    game = Game(1)
     game.guess_or_bet()
 else:
-   print("Invalid Player Name")
+   print("Invalid Player Name, Autofilling")
+   px = "Arouf"
+   game = Game(0)
+   game.guess_or_bet()
