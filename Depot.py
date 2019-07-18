@@ -19,8 +19,10 @@ class Case:
     def __init__(self, number):
         self.number = number
 
-    def __repr__(self):
-        return "<"
+# + ", type: " + str(self.is_even) + ", from column number " + str(self.column) + " and row number " + str(self.row) 
+
+    #def __str__(self):
+        #return "<__main__.Case: color = " + str(self.color) + ">" 
 
     def color(self):
         """Define number's color"""
@@ -72,5 +74,5 @@ class Case:
             return 3
 
 list_of_cases = [Case(x) for x in range(0, 37)]
-c = list_of_cases
+c = list_of_cases[1]
 print(c)

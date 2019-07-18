@@ -21,8 +21,7 @@ gamepicker
 
 
         print("How many tokens are you gonna Bet this time ?")
-        pxbet = input()
-        pxbet = float(pxbet)
+        pxbet = float(input())
         while float(pxbet) >= 0.0 :
             if float(pxbet) < self.mbx:
                 print(" In order to play, Please respect the minimum bet rule ")
