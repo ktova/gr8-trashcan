@@ -12,6 +12,7 @@ from Depot import list_of_cases
 #yeezus casino
 
 class Game:
+    rx = 0
     bet = 0
     minbetx = mbx = 0.0
     roundx = rx = 0
@@ -29,12 +30,14 @@ class Game:
     multipler = 0
     powerbet = 0
     gain = 0
+    endround = 1
 
     def __init__(self, number):
         self.number = number
         pass
 
     def roundwin(self):
+        self.endround = 1
         if self.multipler == 2:
             self.powerbet == 2
             self.gain = float(self.pxmisebet) * float(self.powerbet)
@@ -51,13 +54,13 @@ class Game:
             return 'error invalid win'
         print("Congrats you won this round !")
         print("Your new amount of credits is : " + str(self.bet))
-        
 
     def roundloss(self):
+        self.endround = 1
         self.bet = float(self.bet) - float(self.pxmisebet)
         print("Unlucky, you did bet on the wrong number. Better luck next time !")
         print("Your new amount of credits is : " + str(self.bet))
-
+        print(self.endround)
 
     def credits_checker(self):
         if float(self.pxmisebet) > float(self.bet) :
@@ -103,6 +106,7 @@ class Game:
              return self.pxmisebet
         else:
              print("You can't bet more than " + str(self.bet) + " tokens")
+        self.mise()
 
 
     def confirmise(self):
@@ -154,23 +158,22 @@ class Game:
         else:
             print("Unexpected Error")
             return 'Error404'
-
+        
 
     def newRound(self):
         """Round Counter v1"""
 
-        rx = 0
-        rx += 1
-        if rx == 1:
+        self.rx += 1
+        if self.rx == 1:
             self.mbx += 1.0
-        elif 2 <= rx <= 4:
-            self.mbx += 0.25
-        elif 4 < rx <= 8:
+        elif 2 <= self.rx <= 4:
             self.mbx += 0.5
+        elif 4 < self.rx <= 8:
+            self.mbx += 1.0
         else:
-            self.mbx += 1     
+            self.mbx += 2.0    
         Gameinfo = "Current Game Stats: Round[ {} ] | Min.Bet[ {} ] | Player[ {} ] | Credits[ {} ]"
-        print(Gameinfo.format(rx, self.mbx, px, self.bet))
+        print(Gameinfo.format(self.rx, self.mbx, px, self.bet))
 
 
     def currentRound(self):
@@ -239,9 +242,15 @@ class Game:
                 print("Messing with the ksino ? Try beating us bigboy")
                 self.bet = 1
 
-            self.newRound()   
-            self.currentRound()
-            self.usround()
+            while self.endround in range(0,2):
+                if self.endround == 1:
+                    self.newRound()
+                    self.currentRound()
+                    self.usround()
+                    self.endround == 0
+                else:
+                    print(self.endround)
+                    print('error')
 
         #Invalid Selection
         
