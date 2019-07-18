@@ -150,16 +150,17 @@ class Game:
     #"""Check if player respects betting rules"""
         self.pxmisebet = float(input())
         while float(self.pxmisebet) >= 0.0 :
-            if float(self.pxmisebet) < self.mbx:
+            if float(self.pxmisebet) < float(self.mbx):
                 print(" In order to play, Please respect the minimum bet rule ")
-                pxmisebet = input()
+                self.pxmisebet = float(input())
             elif float(self.pxmisebet) > float(self.bet):
                 print(" Thats way too much for your wallet sir ")
-                self.pxmisebet = input()
+                self.pxmisebet = float(input())
             else:
-                self.bet = float(self.bet) - float(self.pxmisebet)
+                self.bet = float(self.bet) - self.pxmisebet
                 print("You gambled " + str(self.pxmisebet) + " tokens this round")
                 break  
+#error happens starting from this line
         self.credits_checker()
         self.mise()      
 
@@ -167,6 +168,7 @@ class Game:
         """Retrieve credits when tokens are gambled"""
         if float(self.pxmisebet) > 0:
             self.bet = float(self.bet) - float(self.pxmisebet)
+            print(self.bet)
         else: 
             return 'error 400'
 
@@ -311,6 +313,7 @@ class Game:
                 if self.endround == 1:
                     self.newRound()
                     self.currentRound()
+                    print(self.bet)
                     self.usround()
                     self.endround == 0
                 else:
