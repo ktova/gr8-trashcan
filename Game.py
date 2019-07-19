@@ -9,8 +9,6 @@ from Depot import Case
 from Depot import rouletteCases
 from Depot import list_of_cases
 
-#yeezus casino
-
 class Game:
     rx = 0
     bet = 0
@@ -33,6 +31,7 @@ class Game:
     powerbet = 1.0
     gain = 1.0
     endround = 1
+    pickedpair = ''
 
     def __init__(self, number):
         self.number = number
@@ -41,12 +40,15 @@ class Game:
     def roundwin(self):
         """Return win"""
         self.endround = 1
-        #Gain for 2x multiplers
         if int(self.multipler) == 2:
             self.gain = float(self.pxmisebet) * int(self.multipler)
             self.bet = float(self.bet) + float(self.gain)
         #Gain for 3x multiplers
         elif int(self.multipler) == 3:
+            self.gain = float(self.pxmisebet) * float(self.multipler)
+            self.bet = self.bet + self.gain
+        #Gain for pairs
+        elif int(self.multipler) == 18:
             self.gain = float(self.pxmisebet) * float(self.multipler)
             self.bet = self.bet + self.gain
         #Gain for single numbers 0 included
@@ -65,7 +67,6 @@ class Game:
     def roundloss(self):
         """Return loss"""
         self.endround = 1
-        self.bet = float(self.bet) - float(self.pxmisebet)
         print("Unlucky, you did bet on the wrong number. Better luck next time !")
         print("Your new amount of credits is : " + str(self.bet))
 
@@ -81,7 +82,7 @@ class Game:
     def halfpicker(self):
         """Gamble on the first 18s number or the last 18s"""
         self.context = "half"
-        self.multipler = 2.0
+        self.multatr()
         halfies = {
             "first" : "first half",
             "last" : "last half"
@@ -106,7 +107,7 @@ class Game:
     def singlenumpicker(self):
         """Gamble on single numbers"""
         self.context = "singlenumber"
-        self.multipler == 36.0
+        self.multatr()
         print("Which number do you want to gamble on ?")
         self.pxnumber = input()
         while int(self.pxnumber) >= 0:
@@ -122,7 +123,7 @@ class Game:
     def doublenumpicker(self):
         """Gamble on two numbers"""
         self.context = "doublenumbers"
-        self.multipler == 18 
+        self.multatr()
         print("Note: Only pairs of following numbers are allowed e.g. 1 & 2 | 35 & 36")
         print("What is the first number of the pair you want to Gamble on ?")
         self.pn1 = int(input())
@@ -135,15 +136,14 @@ class Game:
                 selectedpair = int(input())
                 while selectedpair >= 0:
                     if selectedpair == 1:
-                        pickedpair = self.pn1, self.pairprop1
-                        return pickedpair
+                        self.pickedpair = self.pn1, self.pairprop1
                     elif selectedpair == 2:
-                        pickedpair = self.pn1, self.pairprop2
-                        return pickedpair
+                        self.pickedpair = self.pn1, self.pairprop2                       
                     else:
                         print("You must chose an existing pair")
                         selectedpair = int(input())
-                break
+                    break
+
         #Pair Suggestion when number is 0
             elif self.pn1 == 0:
                 self.multinumsugster()
@@ -153,24 +153,25 @@ class Game:
                 selectedpair = int(input())
                 while selectedpair >= 0:
                     if selectedpair == 1:
-                        pickedpair = self.pn1, self.pairprop1
-                        return pickedpair
+                        self.pickedpair = self.pn1, self.pairprop1                        
                     elif selectedpair == 2:
-                        pickedpair = self.pn1, self.pairprop2
-                        return pickedpair
+                        self.pickedpair = self.pn1, self.pairprop2                       
                     elif selectedpair == 3:
-                        pickedpair = self.pn1, self.pairprop3
-                        return pickedpair
+                        self.pickedpair = self.pn1, self.pairprop3                       
                     else:
                         print("You must chose an existing pair")
-                        selectedpair = int(input())
-                break
-        #t srx la
+                        selectedpair = int(input())              
+                    break
+    #t srx la
             else:
                 print("Please enter a valid number between 1 and 36")
                 self.pn1 = int(input())
-                break
-            self.confirmise()
+            break
+
+        print(f"How many tokens are you gonna bet on {self.pickedpair} ?")        
+        self.confirmise()
+
+    #calls bet input 
 
     def multinumsugster(self):
         """Calculates pairs, squares and sixts gambles"""
@@ -227,14 +228,27 @@ class Game:
                 print("You gambled " + str(self.pxmisebet) + " tokens this round")
                 break  
         self.credits_checker()
-        #self.mise()      
+        self.mise()      
+
+    def multatr(self):
+        if self.context == "singlenumber":
+            self.multipler = 36.0
+            return self.multipler
+        elif self.context == "doublenumbers":
+            self.multipler = 18.0
+            return self.multipler
+        elif self.context == "half":
+            self.multipler = 2.0
+            return self.multipler
+        else:
+            print("error mutlipler")
 
     def mise(self):
         """Retrieve credits when tokens are gambled - will adapt for multiple bet per round"""
-        #if float(self.pxmisebet) > 0:
-            #self.bet = float(self.bet) - float(self.pxmisebet)
-        #else: 
-            #return 'error 400'
+        if float(self.pxmisebet) > 0:
+            self.bet = float(self.bet) - float(self.pxmisebet)
+        else: 
+            return 'error 400'
 
 
     def usround(self):
@@ -243,16 +257,25 @@ class Game:
         said number color, evenodd, row and column"""
         self.winoperator = int(random.choice(rouletteCases))
         print("The winning number is : " + str(self.winoperator))
+
         #Case.color(self.winoperator)
         #Case.color(self.winoperator)
         #Case.row(self.winoperator)
         #Case.column(self.winoperator)
         #Case stats checker ends^
+
         if self.context == "singlenumber":
             if int(self.winoperator) == int(self.pxnumber):
                 self.roundwin()
             else:
                 self.roundloss()
+
+        elif self.context == "doublenumbers":
+            if int(self.winoperator) in self.pickedpair:
+                self.roundwin()
+            else:
+                self.roundloss()
+
         elif self.context == "half":
             if self.halfbet == 1:
                 if 1 <= int(self.winoperator) < 19:
@@ -270,6 +293,7 @@ class Game:
                     self.roundloss()
                 else:
                     self.roundloss()
+
             else:
                 print("Unexpected Error")
                 return 'Error411'
@@ -331,65 +355,42 @@ class Game:
     def guess_or_bet(self):
         """Load Game Function"""
 
-        print("Guess or Bet ?")
-        pick = input().lower()
-
-        #Player selected Guess---------------------------------------------------------------------------------------------------
-
-        if pick == "guess":
-            for x in cword:
-                if x == "cannabise":
-                    print("thats illegal")
-                    continue
-                else:
-                    print(x)
-
-        #Player selected Guess---------------------------------------------------------------------------------------------------
-
-        #Player selected Bet-----------------------------------------------------------------------------------------------------
-
-        elif pick == "bet":
-            print("Please type your starting bet [Up to 100 Tokens]")
-            bet = input()
-            bet = float(bet)
-            if bet <= 10:
-                self.bet = float(bet) * bonuses[0]
-                print(Bannounce)
-                print(self.bet)
-            elif 10 < bet <= 25:
-                self.bet = float(bet) * bonuses[1]
-                print(Bannounce)
-                print(self.bet)
-            elif 25 < bet <= 50:
-                self.bet = float(bet) * bonuses[2]
-                print(Bannounce)
-                print(self.bet)
-            elif 50 < bet <= 75:
-                self.bet = float(bet) * bonuses[3]
-                print(Bannounce)
-                print(self.bet)
-            elif 75 < bet <= 100:
-                self.bet = float(bet) * bonuses[4]
-                print(Bannounce)
-                print(self.bet)
-            else:
-                print("Messing with the ksino ? Try beating us bigboy")
-                self.bet = 1
-           
-            while self.endround in range(0,2):
-                if self.endround == 1:
-                    self.newRound()
-                    self.currentRound()
-                    self.usround()
-                    self.endround == 0
-                else:
-                    print(self.endround)
-                    print('error')
-
-        #Invalid Selection
-        
+        print("Please type your starting bet [Up to 100 Tokens]")
+        bet = input()
+        bet = float(bet)
+        if bet <= 10:
+            self.bet = float(bet) * bonuses[0]
+            print(Bannounce)
+            print(self.bet)
+        elif 10 < bet <= 25:
+            self.bet = float(bet) * bonuses[1]
+            print(Bannounce)
+            print(self.bet)
+        elif 25 < bet <= 50:
+            self.bet = float(bet) * bonuses[2]
+            print(Bannounce)
+            print(self.bet)
+        elif 50 < bet <= 75:
+            self.bet = float(bet) * bonuses[3]
+            print(Bannounce)
+            print(self.bet)
+        elif 75 < bet <= 100:
+            self.bet = float(bet) * bonuses[4]
+            print(Bannounce)
+            print(self.bet)
         else:
-            print("Enter a valid pick")
+            print("Messing with the ksino ? Try beating us bigboy")
+            self.bet = 1
+           
+        while self.endround in range(0,2):
+            if self.endround == 1:
+                self.newRound()
+                self.currentRound()
+                self.usround()
+                self.endround == 0
+            else:
+                print(self.endround)
+                print('error')
 
         #Load Function
 
@@ -397,7 +398,15 @@ class Game:
 
 
 #Setup
+#header
 
+print("")
+print("                                       –––––––––––––––––––––––––––––––––––––––––––––––––                    ")
+print("                                      |                                                 |                   ")
+print("                                      |                  Yeezus Casino                  |                   ")
+print("                                      |                                                 |                   ")
+print("                                       –––––––––––––––––––––––––––––––––––––––––––––––––                    ")
+print("")
 print("Hey Player, what is your name ?")
 px = "    "
 px = input()
