@@ -191,9 +191,11 @@ class Game:
             self.trioprop1 = (0, 1, 4)
             self.trioprop2 = (0, 2, 5)
             self.trioprop3 = (0, 3, 6)
+            return self.trioprop1, self.trioprop2, self.trioprop3
         elif self.tn1 in f1:
-            pass #wip
-
+            self.trioprop1 = self.tn1 + 1
+            self.trioprop2 = self.tn1 + 2
+            return self.trioprop1, self.trioprop2
             
         #Square predict
         #Sixt predict
