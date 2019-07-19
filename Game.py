@@ -119,6 +119,75 @@ class Game:
         print(f"How many tokens are you gonna bet on {[self.pxnumber]}")
         self.confirmise()
 
+    def doublenumpicker(self):
+        """Gamble on two numbers"""
+        self.context = "doublenumbers"
+        self.multipler == 18 
+        print("Note: Only pairs of following numbers are allowed e.g. 1 & 2 | 35 & 36")
+        print("What is the first number of the pair you want to Gamble on ?")
+        self.pn1 = int(input())
+        while self.pn1 >= 0 :
+        #Pair Suggestion when number is 0 < n < 37
+            if 1 <= self.pn1 <= 36 :
+                self.multinumsugster()
+                print("[1] Gamble on pair " + str(self.pn1) + "-" + str(self.pairprop1))
+                print("[2] Gamble on pair " + str(self.pn1) + "-" + str(self.pairprop2))
+                selectedpair = int(input())
+                while selectedpair >= 0:
+                    if selectedpair == 1:
+                        pickedpair = self.pn1, self.pairprop1
+                        return pickedpair
+                    elif selectedpair == 2:
+                        pickedpair = self.pn1, self.pairprop2
+                        return pickedpair
+                    else:
+                        print("You must chose an existing pair")
+                        selectedpair = int(input())
+                break
+        #Pair Suggestion when number is 0
+            elif self.pn1 == 0:
+                self.multinumsugster()
+                print("[1] Gamble on pair " + str(self.pn1) + "-" + str(self.pairprop1))
+                print("[2] Gamble on pair " + str(self.pn1) + "-" + str(self.pairprop2))
+                print("[3] Gamble on pair " + str(self.pn1) + "-" + str(self.pairprop3))
+                selectedpair = int(input())
+                while selectedpair >= 0:
+                    if selectedpair == 1:
+                        pickedpair = self.pn1, self.pairprop1
+                        return pickedpair
+                    elif selectedpair == 2:
+                        pickedpair = self.pn1, self.pairprop2
+                        return pickedpair
+                    elif selectedpair == 3:
+                        pickedpair = self.pn1, self.pairprop3
+                        return pickedpair
+                    else:
+                        print("You must chose an existing pair")
+                        selectedpair = int(input())
+                break
+        #t srx la
+            else:
+                print("Please enter a valid number between 1 and 36")
+                self.pn1 = int(input())
+                break
+            self.confirmise()
+
+    def multinumsugster(self):
+        """Calculates pairs, squares and sixts gambles"""
+        #Pairs predict
+        if self.pn1 == 0:
+            self.pairprop1 = 1
+            self.pairprop2 = 2
+            self.pairprop3 = 3
+            return self.pairprop1, self.pairprop2, self.pairprop3
+        else:
+            self.pairprop1 = self.pn1 + 1
+            self.pairprop2 = self.pn1 - 1
+            return self.pairprop1, self.pairprop2
+        #Square predict
+        #Sixt predict
+
+
     def colorpicker(self):
         """Gamble on colors"""
         self.context = "color"
@@ -158,7 +227,7 @@ class Game:
                 print("You gambled " + str(self.pxmisebet) + " tokens this round")
                 break  
         self.credits_checker()
-        self.mise()      
+        #self.mise()      
 
     def mise(self):
         """Retrieve credits when tokens are gambled - will adapt for multiple bet per round"""
@@ -233,7 +302,7 @@ class Game:
         """Current Game Amount to Bet"""
 #Gambling Mode Picker v1
         print("Which format do you want to gamble on ? ")
-        print(" [1] Single (1:36) | [2] Half (1:2) | [x] Even/Odd (1:2) | [x] Dozen (1:3) | [x] Sixt (1:6) | [x] Square (1:9) | [x] Double (1:18) | [x] Color (1:2) |")
+        print(" [1] Single (1:36) | [2] Double (1:18) | [3] Half (1:2) | [x] Even/Odd (1:2) | [x] Dozen (1:3) | [x] Sixt (1:6) | [x] Square (1:9) | [x] Color (1:2) |")
         print('----------------------------------------------------------------------------------------------------------------------------------------------')
         if self.bet < self.mbx:
             print("Seems like you don't have enough tokens to play")
@@ -247,6 +316,9 @@ class Game:
                 break
             elif self.gamepicker == "single":
                 self.singlenumpicker()
+                break
+            elif self.gamepicker == "double":
+                self.doublenumpicker()
                 break
             elif self.gamepicker == "half":
                 self.halfpicker()
