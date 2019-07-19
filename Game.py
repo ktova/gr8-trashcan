@@ -45,8 +45,6 @@ class Game:
         if int(self.multipler) == 2:
             self.gain = float(self.pxmisebet) * int(self.multipler)
             self.bet = float(self.bet) + float(self.gain)
-            print(self.pxmisebet)
-            print(self.gain)
         #Gain for 3x multiplers
         elif int(self.multipler) == 3:
             self.gain = float(self.pxmisebet) * float(self.multipler)
@@ -157,20 +155,17 @@ class Game:
                 print(" Thats way too much for your wallet sir ")
                 self.pxmisebet = float(input())
             else:
-                self.bet = float(self.bet) - self.pxmisebet
                 print("You gambled " + str(self.pxmisebet) + " tokens this round")
                 break  
-#error happens starting from this line
         self.credits_checker()
         self.mise()      
 
     def mise(self):
-        """Retrieve credits when tokens are gambled"""
-        if float(self.pxmisebet) > 0:
-            self.bet = float(self.bet) - float(self.pxmisebet)
-            print(self.bet)
-        else: 
-            return 'error 400'
+        """Retrieve credits when tokens are gambled - will adapt for multiple bet per round"""
+        #if float(self.pxmisebet) > 0:
+            #self.bet = float(self.bet) - float(self.pxmisebet)
+        #else: 
+            #return 'error 400'
 
 
     def usround(self):
@@ -313,7 +308,6 @@ class Game:
                 if self.endround == 1:
                     self.newRound()
                     self.currentRound()
-                    print(self.bet)
                     self.usround()
                     self.endround == 0
                 else:
