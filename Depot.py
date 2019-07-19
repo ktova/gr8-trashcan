@@ -10,6 +10,11 @@ rouletteCases = [
 #Bonuses value
 bonuses = [2, 1.625, 1.5, 1.625, 1.75]
 
+#triovalues
+f1 = (1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34)
+f2 = (2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35)
+f3 = (3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36)
+
 class Case:
     """Cases properties"""
 
@@ -73,6 +78,3 @@ class Case:
 
 
 list_of_cases = [Case(x) for x in range(0, 37)]
-
-
-

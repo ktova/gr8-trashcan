@@ -8,6 +8,7 @@ from Depot import bonuses
 from Depot import Case
 from Depot import rouletteCases
 from Depot import list_of_cases
+from Depot import f1,f2, f3
 
 class Game:
     rx = 0
@@ -174,7 +175,7 @@ class Game:
     #calls bet input 
 
     def multinumsugster(self):
-        """Calculates pairs, squares and sixts gambles"""
+        """Calculates pairs, trios, squares and sixts gambles"""
         #Pairs predict
         if self.pn1 == 0:
             self.pairprop1 = 1
@@ -185,6 +186,15 @@ class Game:
             self.pairprop1 = self.pn1 + 1
             self.pairprop2 = self.pn1 - 1
             return self.pairprop1, self.pairprop2
+        #Trios predict
+        if self.tn1 == 0:
+            self.trioprop1 = (0, 1, 4)
+            self.trioprop2 = (0, 2, 5)
+            self.trioprop3 = (0, 3, 6)
+        elif self.tn1 in f1:
+            pass #wip
+
+            
         #Square predict
         #Sixt predict
 
