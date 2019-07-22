@@ -1,3 +1,4 @@
+import django
 import json
 import random
 import Depot
@@ -33,6 +34,7 @@ class Game:
     gain = 1.0
     endround = 1
     pickedpair = ''
+    pickedtrio = ''
 
     def __init__(self, number):
         self.number = number
@@ -48,6 +50,10 @@ class Game:
         elif int(self.multipler) == 3:
             self.gain = float(self.pxmisebet) * float(self.multipler)
             self.bet = self.bet + self.gain
+        #Gain for trios
+        elif int(self.multipler) == 9:
+            self.gain = float(self.pxmisebet) * float(self.multipler)
+            self.bet = self.bet + self.gain
         #Gain for pairs
         elif int(self.multipler) == 18:
             self.gain = float(self.pxmisebet) * float(self.multipler)
@@ -57,9 +63,10 @@ class Game:
             self.gain = float(self.pxmisebet) * float(self.multipler)
             self.bet = self.bet + self.gain
         else:
-            print(self.multipler)
-            print(self.powerbet)
-            print(self.gain)
+        #Debugg
+            print("multipler: " + str(self.multipler))
+            print("powerbet: " + str(self.powerbet))
+            print("gains: " + str(self.gain))
             print("Error distributing the gains")
             return 'error invalid win'
         print("Congrats you won this round !")
@@ -125,7 +132,7 @@ class Game:
         """Gamble on two numbers"""
         self.context = "doublenumbers"
         self.multatr()
-        print("Note: Only pairs of following numbers are allowed e.g. 1 & 2 | 35 & 36")
+        print("Notes: Only pairs of following numbers are allowed e.g. 1 & 2 | 35 & 36")
         print("What is the first number of the pair you want to Gamble on ?")
         self.pn1 = int(input())
         while self.pn1 >= 0 :
@@ -168,37 +175,92 @@ class Game:
                 print("Please enter a valid number between 1 and 36")
                 self.pn1 = int(input())
             break
-
+ #calls bet input 
         print(f"How many tokens are you gonna bet on {self.pickedpair} ?")        
         self.confirmise()
 
-    #calls bet input 
+    
+    def trionumpicker(self):
+        """"Gamble on three numbers"""
+        self.context = "trionumbers"
+        self.multatr()
+        print("Notes: 3-numbers gambling according to American's roulette rules, you can only gamble on rows from the boardgame e.g. : 1-2-3 is allowed , 1-4-7 is not. ")
+        print("What number do you want to gamble on ?")
+        self.tn1 = int(input())
+        while self.tn1 >= 0:
+        #Trios Suggestion when number is 0 < n < 37
+            if 1 <= self.tn1 <= 36 :
+                self.multinumsugster()
+                print("You are gonna gamble on the trio : " + str(self.tn1) + "-" + str(self.trioprop1) + "-" + str(self.trioprop2) + " are you ok with that ?")
+                confirm = str(input().lower())
+                if confirm == "yes":
+                    self.pickedtrio = self.tn1, self.trioprop1, self.trioprop2
+                else :
+                    pass
+        #Trios Suggestion when number = 0
+            elif self.tn1 == 0:
+                self.multinumsugster()
+                print("[1] Gamble on trio " + str(self.trioprop1))
+                print("[2] Gamble on trio " + str(self.trioprop2))
+                print("[3] Gamble on trio " + str(self.trioprop3))
+                selectedtrio = int(input())
+                while selectedtrio >= 0:
+                    if selectedtrio == 1:
+                        self.pickedtrio = self.trioprop1
+                    elif selectedtrio == 2:
+                        self.pickedtrio = self.trioprop2
+                    elif selectedtrio == 3:
+                        self.pickedtrio = self.trioprop3
+                    else:
+                        print("You must chose an existing trio")
+                        selectedtrio = int(input())
+                    break
+            else:
+                print("Please enter a valid number between 1 and 36")
+                self.tn1 = int(input())
+            break
+        print(f"How many tokens do you want to gamble on {self.pickedtrio} ?")
+        self.confirmise()
+
 
     def multinumsugster(self):
         """Calculates pairs, trios, squares and sixts gambles"""
         #Pairs predict
-        if self.pn1 == 0:
-            self.pairprop1 = 1
-            self.pairprop2 = 2
-            self.pairprop3 = 3
-            return self.pairprop1, self.pairprop2, self.pairprop3
-        else:
-            self.pairprop1 = self.pn1 + 1
-            self.pairprop2 = self.pn1 - 1
-            return self.pairprop1, self.pairprop2
+        if self.context == "doublenumbers":              
+            if self.pn1 == 0:
+                self.pairprop1 = 1
+                self.pairprop2 = 2
+                self.pairprop3 = 3
+                return self.pairprop1, self.pairprop2, self.pairprop3
+            else:
+                self.pairprop1 = self.pn1 + 1
+                self.pairprop2 = self.pn1 - 1
+                return self.pairprop1, self.pairprop2
+
         #Trios predict
-        if self.tn1 == 0:
-            self.trioprop1 = (0, 1, 4)
-            self.trioprop2 = (0, 2, 5)
-            self.trioprop3 = (0, 3, 6)
-            return self.trioprop1, self.trioprop2, self.trioprop3
-        elif self.tn1 in f1:
-            self.trioprop1 = self.tn1 + 1
-            self.trioprop2 = self.tn1 + 2
-            return self.trioprop1, self.trioprop2
-            
+        elif self.context == "trionumbers":
+            if self.tn1 == 0:
+                self.trioprop1 = (0, 1, 4)
+                self.trioprop2 = (0, 2, 5)
+                self.trioprop3 = (0, 3, 6)
+                return self.trioprop1, self.trioprop2, self.trioprop3
+            elif self.tn1 in f1:
+                self.trioprop1 = self.tn1 + 1
+                self.trioprop2 = self.tn1 + 2
+                return self.trioprop1, self.trioprop2
+            elif self.tn1 in f2:
+                self.trioprop1 = self.tn1 + 1
+                self.trioprop2 = self.tn1 - 1
+                return self.trioprop1, self.trioprop2
+            else:
+                self.trioprop1 = self.tn1 - 1
+                self.trioprop2 = self.tn1 - 2
+                return self.trioprop1, self.trioprop2
+
         #Square predict
         #Sixt predict
+        else:
+            pass
 
 
     def colorpicker(self):
@@ -249,6 +311,9 @@ class Game:
         elif self.context == "doublenumbers":
             self.multipler = 18.0
             return self.multipler
+        elif self.context == "trionumbers":
+            self.multipler = 9.0
+            return self.multipler
         elif self.context == "half":
             self.multipler = 2.0
             return self.multipler
@@ -267,6 +332,9 @@ class Game:
         """Winning Number Generator
         Generates a random number then calculates
         said number color, evenodd, row and column"""
+        #Debugwinning
+        #self.winoperator = int(1)
+        
         self.winoperator = int(random.choice(rouletteCases))
         print("The winning number is : " + str(self.winoperator))
 
@@ -284,6 +352,12 @@ class Game:
 
         elif self.context == "doublenumbers":
             if int(self.winoperator) in self.pickedpair:
+                self.roundwin()
+            else:
+                self.roundloss()
+
+        elif self.context == "trionumbers":
+            if int(self.winoperator) in self.pickedtrio:
                 self.roundwin()
             else:
                 self.roundloss()
@@ -338,7 +412,7 @@ class Game:
         """Current Game Amount to Bet"""
 #Gambling Mode Picker v1
         print("Which format do you want to gamble on ? ")
-        print(" [1] Single (1:36) | [2] Double (1:18) | [3] Half (1:2) | [x] Even/Odd (1:2) | [x] Dozen (1:3) | [x] Sixt (1:6) | [x] Square (1:9) | [x] Color (1:2) |")
+        print(" [1] Single (1:36) | [2] Double (1:18) | [3] Triple (1:9) | [4] Half (1:2) | [x] Even/Odd (1:2) | [x] Dozen (1:3) | [x] Sixt (1:6) | [x] Square (1:9) | [x] Color (1:2) |")
         print('----------------------------------------------------------------------------------------------------------------------------------------------')
         if self.bet < self.mbx:
             print("Seems like you don't have enough tokens to play")
@@ -355,6 +429,9 @@ class Game:
                 break
             elif self.gamepicker == "double":
                 self.doublenumpicker()
+                break
+            elif self.gamepicker == "triple":
+                self.trionumpicker()
                 break
             elif self.gamepicker == "half":
                 self.halfpicker()
