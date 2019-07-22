@@ -415,9 +415,7 @@ class Game:
                 print("Unexpected error")
                 return 'Error 418'
             self.izeven = Case(self.winoperator).is_even()
-            print(self.izeven)
-            print(self.newOD)
-            if self.izeven == self.newOD:
+            if str(self.izeven) == str(self.newOD):
                 self.roundwin()
             elif self.winoperator == 0:
                 self.roundnul()
