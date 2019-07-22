@@ -37,6 +37,7 @@ class Game:
     pickedpair = ''
     pickedtrio = ''
     casecolor = ''
+    newOD = ''
 
     def __init__(self, number):
         self.number = number
@@ -407,18 +408,18 @@ class Game:
         elif self.context == "oddeven":
 
             if self.pxodeven == "odd":
-                self.pxodeven == "False"
+                self.newOD = 'False'
             elif self.pxodeven == "even":
-                self.pxodeven == "True"
+                self.newOD = 'True'
             else:
                 print("Unexpected error")
                 return 'Error 418'
             self.izeven = Case(self.winoperator).is_even()
             print(self.izeven)
-            print(self.pxodeven)
-            if self.izeven == self.pxodeven:
+            print(self.newOD)
+            if self.izeven == self.newOD:
                 self.roundwin()
-            elif self.izeven == 0:
+            elif self.winoperator == 0:
                 self.roundnul()
             else:
                 self.roundloss()
@@ -450,7 +451,7 @@ class Game:
         """Current Game Amount to Bet"""
 #Gambling Mode Picker v1
         print("Which format do you want to gamble on ? ")
-        print(" [1] Single (1:36) | [2] Double (1:18) | [3] Triple (1:9) | [4] Half (1:2) | [x] Even/Odd (1:2) | [x] Dozen (1:3) | [x] Sixt (1:6) | [x] Square (1:9) | [x] Color (1:2) |")
+        print(" [1] Single (1:36) | [2] Double (1:18) | [3] Triple (1:9) | [4] Half (1:2) | [5] Even/Odd (1:2) | [6] Color (1:2) | [x] Dozen (1:3) | [x] Sixt (1:6) | [x] Square (1:9) |")
         print('----------------------------------------------------------------------------------------------------------------------------------------------')
         if self.bet < self.mbx:
             print("Seems like you don't have enough tokens to play")
