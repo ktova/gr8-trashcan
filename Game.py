@@ -19,6 +19,7 @@ class Game:
     winoperator = ' '
     pxnumber = ' '
     pxcolor = ' '
+    pxodeven = ''
     pxbetcolor = " "
     pxhalf = " "
     gamepicker = ' '
@@ -35,6 +36,7 @@ class Game:
     endround = 1
     pickedpair = ''
     pickedtrio = ''
+    casecolor = ''
 
     def __init__(self, number):
         self.number = number
@@ -77,6 +79,12 @@ class Game:
         self.endround = 1
         print("Unlucky, you did bet on the wrong number. Better luck next time !")
         print("Your new amount of credits is : " + str(self.bet))
+
+    def roundnul(self):
+        self.endround = 1
+        print("Unfortunately this round is not a win nor a lose for you, half your bet has been returned to your credits")
+        self.gain = float(self.pxmisebet) / 2 
+        self.bet = self.bet + self.gain
 
     def credits_checker(self):
         """Checks if player is allowed to bet"""
@@ -262,30 +270,32 @@ class Game:
         else:
             pass
 
+    def oddevenpicker(self):
+        """Gamble on Odd/Even numbers"""
+        self.context = "oddeven"
+        self.multatr()
+        pairimpair = ("odd, even")
+        print("Do you want to bet on an odd number or an even one ?")
+        self.pxodeven = input().lower()
+        if self.pxodeven in pairimpair:
+            print(f"How many tokens do you want to gamble on {self.pxodeven} numbers ?")
+            self.confirmise()
+        else:
+            print("Error thats not a valid value")
+
 
     def colorpicker(self):
         """Gamble on colors"""
         self.context = "color"
-        self.multipler == 2
-        colors = {
-            "red": "Red",
-            "black": "Black"
-        }
+        self.multatr()
+        colors = ("red, black")
         print("What color do you want to gamble on ? [ red | black ]")
-        pxcolor = input().lower()
-        try:
-            print(f"How many tokens do you want to gamble on {colors[pxcolor]} ?")
-            self.pxmisebet = float(input())
-        except:
-            print("Error, that's not a valid color")
-
-        self.credits_checker()
-        if self.checked == 1:
-             print("You gambled " + str(self.pxmisebet) + " tokens")
-             return self.pxmisebet
+        self.pxcolor = input().lower()        
+        if self.pxcolor in colors:
+            print(f"How many tokens do you want to gamble on {self.pxcolor} ?")
+            self.confirmise()
         else:
-             print("You can't bet more than " + str(self.bet) + " tokens")
-        self.mise()
+            print("Error, that's not a valid color")
 
 
     def confirmise(self):
@@ -317,6 +327,12 @@ class Game:
         elif self.context == "half":
             self.multipler = 2.0
             return self.multipler
+        elif self.context == "color":
+            self.multipler = 2.0
+            return self.multipler
+        elif self.context == "oddeven":
+            self.multipler = 2.0
+            return self.multipler
         else:
             print("error mutlipler")
 
@@ -334,12 +350,10 @@ class Game:
         said number color, evenodd, row and column"""
         #Debugwinning
         #self.winoperator = int(1)
-        
+
         self.winoperator = int(random.choice(rouletteCases))
         print("The winning number is : " + str(self.winoperator))
 
-        #Case.color(self.winoperator)
-        #Case.color(self.winoperator)
         #Case.row(self.winoperator)
         #Case.column(self.winoperator)
         #Case stats checker ends^
@@ -367,24 +381,48 @@ class Game:
                 if 1 <= int(self.winoperator) < 19:
                     self.roundwin()
                 elif int(self.winoperator) == 0:
-                    self.pxmisebet / 2
-                    self.roundloss()
+                    self.roundnul()
                 else:
                     self.roundloss()
             elif self.halfbet == 2:
                 if 18 < int(self.winoperator) < 37:
                     self.roundwin()
                 elif int(self.winoperator) == 0:
-                    self.pxmisebet / 2
-                    self.roundloss()
+                    self.roundnul()
                 else:
                     self.roundloss()
-
             else:
                 print("Unexpected Error")
                 return 'Error411'
-        #elif self.context == "color":
-            #Case.color(self.winoperator)
+       
+        elif self.context == "color":
+            self.casecolor = Case(self.winoperator).color()
+            if self.casecolor == self.pxcolor:
+                self.roundwin()
+            elif self.casecolor == 0:
+                self.roundnul()
+            else:
+                self.roundloss()
+
+        elif self.context == "oddeven":
+
+            if self.pxodeven == "odd":
+                self.pxodeven == "False"
+            elif self.pxodeven == "even":
+                self.pxodeven == "True"
+            else:
+                print("Unexpected error")
+                return 'Error 418'
+            self.izeven = Case(self.winoperator).is_even()
+            print(self.izeven)
+            print(self.pxodeven)
+            if self.izeven == self.pxodeven:
+                self.roundwin()
+            elif self.izeven == 0:
+                self.roundnul()
+            else:
+                self.roundloss()
+
         else:
             print("Unexpected Error")
             return 'Error411'
@@ -435,6 +473,9 @@ class Game:
                 break
             elif self.gamepicker == "half":
                 self.halfpicker()
+                break
+            elif self.gamepicker in ("even, odd"):
+                self.oddevenpicker()
                 break
             else:
                 print(self.gamepicker)

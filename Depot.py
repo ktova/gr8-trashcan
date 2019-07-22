@@ -25,12 +25,12 @@ class Case:
         self.number = number
 
     def __repr__(self):
-        return repr(self.color)
+        return "Case()"
 
     def color(self):
         """Define number's color"""
         if self.number == 0:
-            return None
+            return 0
         elif (self.number >= 1 and self.number <= 10) or (
             self.number >= 19 and self.number <= 28
         ):
@@ -78,3 +78,5 @@ class Case:
 
 
 list_of_cases = [Case(x) for x in range(0, 37)]
+
+print(Case(2).is_even())
