@@ -9,7 +9,7 @@ from Depot import bonuses
 from Depot import Case
 from Depot import rouletteCases
 from Depot import list_of_cases
-from Depot import f1,f2, f3
+from Depot import f1,f2,f3,d1,d2,d3
 
 class Game:
     rx = 0
@@ -22,6 +22,7 @@ class Game:
     pxodeven = ''
     pxbetcolor = " "
     pxhalf = " "
+    pxdozen = 1
     gamepicker = ' '
     gameapprove = " "
     pxmisebet = 0
@@ -38,6 +39,11 @@ class Game:
     pickedtrio = ''
     casecolor = ''
     newOD = ''
+    co = ' '
+    ode = ' '
+    evo = ' '
+    col = 1
+    doz = 1
 
     def __init__(self, number):
         self.number = number
@@ -54,7 +60,7 @@ class Game:
             self.gain = float(self.pxmisebet) * float(self.multipler)
             self.bet = self.bet + self.gain
         #Gain for trios
-        elif int(self.multipler) == 9:
+        elif int(self.multipler) == 12:
             self.gain = float(self.pxmisebet) * float(self.multipler)
             self.bet = self.bet + self.gain
         #Gain for pairs
@@ -298,6 +304,35 @@ class Game:
         else:
             print("Error, that's not a valid color")
 
+    def dozenpicker(self):
+        """Gamble on dozens"""
+        self.context = "dozens"
+        self.multatr()
+        print("Which dozen do you want to gamble on ?")
+        self.pxdozen = int(input())
+        while 0 < self.pxdozen:
+            if 0 < self.pxdozen < 4:
+                print(f"How many tokens do you want to gamble on Dozen n˚{self.pxdozen} ?")
+                self.confirmise()
+            else:
+                print("You must chose a valid dozen. hint: there only are 3")
+                self.pxdozen = (input())
+            break
+
+    def columnpicker(self):
+        """Gamble on columns"""
+        self.context = "columns"
+        self.multatr()
+        print("Which column do you want to gamble on ?")
+        self.pxcol = int(input())
+        while 0 < self.pxcol:
+            if 0 < self.pxcol < 4:
+                print(f"How many tokens do you want to gamble on Column n˚{self.pxcol} ?")
+                self.confirmise()
+            else:
+                print("You must chose a valid column. hint: there only are 3")
+                self.pxcol = (input())
+            break
 
     def confirmise(self):
     #"""Check if player respects betting rules"""
@@ -323,7 +358,19 @@ class Game:
             self.multipler = 18.0
             return self.multipler
         elif self.context == "trionumbers":
+            self.multipler = 12.0
+            return self.multipler
+        elif self.context == "square":
             self.multipler = 9.0
+            return self.multipler
+        elif self.context == "sixt":
+            self.multipler = 6.0
+            return self.multipler
+        elif self.context == "dozens":
+            self.multipler = 3.0
+            return self.multipler
+        elif self.context == "columns":
+            self.multipler = 3.0
             return self.multipler
         elif self.context == "half":
             self.multipler = 2.0
@@ -353,30 +400,77 @@ class Game:
         #self.winoperator = int(1)
 
         self.winoperator = int(random.choice(rouletteCases))
+
+        self.co = Case(self.winoperator).color()
+        self.ode = Case(self.winoperator).is_even()
+        self.doz = Case(self.winoperator).dozens()
+        self.col = Case(self.winoperator).column()
+
         print("The winning number is : " + str(self.winoperator))
+        print("Color: " + str(self.co) + " | " + "Even : " + str(self.ode) + " | " + " Dozen number " + str(self.doz) + " | " + " Column number " + str(self.col))
 
-        #Case.row(self.winoperator)
-        #Case.column(self.winoperator)
         #Case stats checker ends^
-
+#1number
         if self.context == "singlenumber":
             if int(self.winoperator) == int(self.pxnumber):
                 self.roundwin()
             else:
                 self.roundloss()
-
+#2number
         elif self.context == "doublenumbers":
             if int(self.winoperator) in self.pickedpair:
                 self.roundwin()
             else:
                 self.roundloss()
-
+#3number
         elif self.context == "trionumbers":
             if int(self.winoperator) in self.pickedtrio:
                 self.roundwin()
             else:
                 self.roundloss()
-
+#dozens
+        elif self.context == "dozens":
+            if self.pxdozen == 1:
+                if int(self.winoperator) in d1:
+                    self.roundwin()
+                else:
+                    self.roundloss()
+            elif self.pxdozen == 2:
+                if int(self.winoperator) in d2:
+                    self.roundwin()
+                else:
+                    self.roundloss()
+            elif self.pxdozen == 3:
+                if int(self.winoperator) in d3:
+                    self.roundwin()
+                else:
+                    self.roundloss()
+            elif self.winoperator == 0:
+                self.roundnul()
+            else:
+                print("Error 418 Coffeepot")
+#columns
+        elif self.context == "columns":
+            if self.pxcol == 1:
+                if int(self.winoperator) in f1:
+                    self.roundwin()
+                else:
+                    self.roundloss()
+            elif self.pxcol == 2:
+                if int(self.winoperator) in f2:
+                    self.roundwin()
+                else:
+                    self.roundloss()
+            elif self.pxcol == 3:
+                if int(self.winoperator) in f3:
+                    self.roundwin()
+                else:
+                    self.roundloss()
+            elif self.winoperator == 0:
+                self.roundnul()
+            else:
+                print("Error 418 Coffeepot")
+#high/low half
         elif self.context == "half":
             if self.halfbet == 1:
                 if 1 <= int(self.winoperator) < 19:
@@ -395,7 +489,7 @@ class Game:
             else:
                 print("Unexpected Error")
                 return 'Error411'
-       
+ #color      
         elif self.context == "color":
             self.casecolor = Case(self.winoperator).color()
             if self.casecolor == self.pxcolor:
@@ -404,7 +498,7 @@ class Game:
                 self.roundnul()
             else:
                 self.roundloss()
-
+#odd/even
         elif self.context == "oddeven":
 
             if self.pxodeven == "odd":
@@ -449,8 +543,11 @@ class Game:
         """Current Game Amount to Bet"""
 #Gambling Mode Picker v1
         print("Which format do you want to gamble on ? ")
-        print(" [1] Single (1:36) | [2] Double (1:18) | [3] Triple (1:9) | [4] Half (1:2) | [5] Even/Odd (1:2) | [6] Color (1:2) | [x] Dozen (1:3) | [x] Sixt (1:6) | [x] Square (1:9) |")
-        print('----------------------------------------------------------------------------------------------------------------------------------------------')
+        print(" ")
+        print("[1] Single (1:36) | [2] Double (1:18) | [3] Triple (1:12) | [4] Square (1:9) | [5] Sixt (1:6) ")
+        print(" ")
+        print("[6] Dozen (1:3) | [7] Column (1:3) | [8] Half (1:2) | [9] Even/Odd (1:2) | [0] Color (1:2) ")
+        print('--------------------------------------------------------------------------------------------------')
         if self.bet < self.mbx:
             print("Seems like you don't have enough tokens to play")
             print("You've lost today.")
@@ -458,22 +555,28 @@ class Game:
             pass
         self.gamepicker = str(input()).lower()
         while self.gamepicker is not 'null':
-            if self.gamepicker == "color":
+            if self.gamepicker in ("color, 0"):
                 self.colorpicker()
                 break
-            elif self.gamepicker == "single":
+            elif self.gamepicker in ("single, 1"):
                 self.singlenumpicker()
                 break
-            elif self.gamepicker == "double":
+            elif self.gamepicker in ("double, 2"):
                 self.doublenumpicker()
                 break
-            elif self.gamepicker == "triple":
+            elif self.gamepicker in ("triple, 3"):
                 self.trionumpicker()
                 break
-            elif self.gamepicker == "half":
+            elif self.gamepicker in ("dozen, 6"):
+                self.dozenpicker()
+                break
+            elif self.gamepicker in ("column, 7"):
+                self.columnpicker()
+                break
+            elif self.gamepicker in ("half, 8"):
                 self.halfpicker()
                 break
-            elif self.gamepicker in ("even, odd"):
+            elif self.gamepicker in ("even, odd, 9"):
                 self.oddevenpicker()
                 break
             else:
