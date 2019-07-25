@@ -2,29 +2,22 @@ import django
 import json
 import random
 import Depot
-from Depot import cword
-from Depot import Bannounce
-from Depot import sword
-from Depot import bonuses
-from Depot import Case
-from Depot import rouletteCases
-from Depot import list_of_cases
-from Depot import f1,f2,f3,d1,d2,d3
+from Depot import cword, Bannounce, sword, bonuses, Case, rouletteCases,f1,f2,f3,d1,d2,d3,l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12
 
 class Game:
     rx = 0
     bet = 0
     minbetx = mbx = 0.0
     roundx = rx = 0
-    winoperator = ' '
-    pxnumber = ' '
-    pxcolor = ' '
+    winoperator = ''
+    pxnumber = ''
+    pxcolor = ''
     pxodeven = ''
-    pxbetcolor = " "
-    pxhalf = " "
+    pxbetcolor = ""
+    pxhalf = ""
     pxdozen = 1
-    gamepicker = ' '
-    gameapprove = " "
+    gamepicker = ''
+    gameapprove = ""
     pxmisebet = 0
     pxbet = ' '
     halfbet = 0
@@ -37,11 +30,13 @@ class Game:
     endround = 1
     pickedpair = ''
     pickedtrio = ''
+    pickedsix = ''
+    pickedlx = ''
     casecolor = ''
     newOD = ''
-    co = ' '
-    ode = ' '
-    evo = ' '
+    co = ''
+    ode = ''
+    evo = ''
     col = 1
     doz = 1
 
@@ -57,6 +52,10 @@ class Game:
             self.bet = float(self.bet) + float(self.gain)
         #Gain for 3x multiplers
         elif int(self.multipler) == 3:
+            self.gain = float(self.pxmisebet) * float(self.multipler)
+            self.bet = self.bet + self.gain
+        #Gain for 6s
+        elif int(self.multipler) == 6:
             self.gain = float(self.pxmisebet) * float(self.multipler)
             self.bet = self.bet + self.gain
         #Gain for trios
@@ -238,6 +237,51 @@ class Game:
         self.confirmise()
 
 
+    def sixnumpicker(self):
+        """Calculate 6numbers gambles"""
+        self.context = "sixnumbers"
+        self.multatr()
+        print("Notes: You can only gamble on two adjacent rows, e.g. 1-2-3 + 4-5-6")
+        print("What number do you want to gamble on ?")
+        self.sn1 = int(input())
+        while self.sn1 >= 0:
+            if self.sn1 == 0:
+                print("You can't gamble on 0 in this format")
+                self.sn1 = int(input())
+                break
+            elif self.sn1 > 36:
+                print("Please gamble on a valid number")
+                self.sn1 = int(input())
+            elif self.sn1 < 4 or self.sn1 > 33:
+                self.multinumsugster()
+                self.lx1.extend(self.lx2)
+                self.pickedsix = 1
+                print("You are gonna gamble on corner " + str(self.lx1))
+                print(f"How many tokens are you gonna bet on {self.lx1} ?")    
+                self.confirmise()
+                break
+            else:
+                self.lx1.extend(self.lx2)
+                self.lx2.extend(self.lx3)
+                print("Which corner are you gonna gamble on ?")
+                print("1 -" + str(self.lx1))
+                print("2 - " + str(self.lx2))
+                self.pickedsix = int(input())
+                while self.pickedsix > 0:
+                    if self.pickedsix == 1:
+                        print(f"How many tokens are you gonna bet on {self.lx1} ?")
+                        self.confirmise()
+                        return self.lx1
+                    elif self.pickedsix == 2:
+                        print(f"How many tokens are you gonna bet on {self.lx2} ?") 
+                        self.confirmise()
+                        return self.lx2
+                    else:
+                        print("You must select a valid corner")
+                        self.pickedsix = int(input())
+                    break
+            
+
     def multinumsugster(self):
         """Calculates pairs, trios, squares and sixts gambles"""
         #Pairs predict
@@ -272,8 +316,87 @@ class Game:
                 self.trioprop2 = self.tn1 - 2
                 return self.trioprop1, self.trioprop2
 
-        #Square predict
         #Sixt predict
+        elif self.context == "sixnumbers":
+            if 1 <= self.sn1 <= 3:
+                self.lx1 = l1
+                self.lx2 = l2
+                return self.lx1, self.lx2
+
+            elif 4 <= self.sn1 <= 6:
+                self.lx1 = l1
+                self.lx2 = l2
+                self.lx3 = l3
+                return self.lx1, self.lx2, self.lx3
+
+            elif 7 <= self.sn1 <= 9:
+                self.lx1 = l2
+                self.lx2 = l3
+                self.lx3 = l4
+                return self.lx1, self.lx2, self.lx3
+
+            elif 10 <= self.sn1 <= 12:
+                self.lx1 = l3
+                self.lx2 = l4
+                self.lx3 = l5
+                return self.lx1, self.lx2, self.lx3
+
+            elif 13 <= self.sn1 <= 15:
+                self.lx1 = l4
+                self.lx2 = l5
+                self.lx3 = l6
+                return self.lx1, self.lx2, self.lx3
+
+            elif 16 <= self.sn1 <= 18:
+                self.lx1 = l5
+                self.lx2 = l6
+                self.lx3 = l7
+                return self.lx1, self.lx2, self.lx3
+
+            elif 19 <= self.sn1 <= 21:
+                self.lx1 = l6
+                self.lx2 = l7
+                self.lx3 = l8
+                return self.lx1, self.lx2, self.lx3
+
+            elif 22 <= self.sn1 <= 24:
+                self.lx1 = l7
+                self.lx2 = l8
+                self.lx3 = l9
+                return self.lx1, self.lx2, self.lx3
+
+            elif 25 <= self.sn1 <= 27:
+                self.lx1 = l8
+                self.lx2 = l9
+                self.lx3 = l10
+                return self.lx1, self.lx2, self.lx3
+
+            elif 28 <= self.sn1 <= 30:
+                self.lx1 = l9
+                self.lx2 = l10
+                self.lx3 = l11
+                return self.lx1, self.lx2, self.lx3
+
+            elif 31 <= self.sn1 <= 33:
+                self.lx1 = l10
+                self.lx2 = l11
+                self.lx3 = l12
+                return self.lx1, self.lx2, self.lx3
+
+            elif 34 <= self.sn1 <= 36:
+                self.lx1 = l11
+                self.lx2 = l12
+                return self.lx1, self.lx2
+
+            else:
+                return 'Error 401 couldnt calculate 6s'
+
+        #Suare predict
+    
+
+
+
+
         else:
             pass
 
@@ -363,7 +486,7 @@ class Game:
         elif self.context == "square":
             self.multipler = 9.0
             return self.multipler
-        elif self.context == "sixt":
+        elif self.context == "sixnumbers":
             self.multipler = 6.0
             return self.multipler
         elif self.context == "dozens":
@@ -397,9 +520,9 @@ class Game:
         Generates a random number then calculates
         said number color, evenodd, row and column"""
         #Debugwinning
-        #self.winoperator = int(1)
+        self.winoperator = int(14)
 
-        self.winoperator = int(random.choice(rouletteCases))
+        #self.winoperator = int(random.choice(rouletteCases))
 
         self.co = Case(self.winoperator).color()
         self.ode = Case(self.winoperator).is_even()
@@ -426,6 +549,23 @@ class Game:
         elif self.context == "trionumbers":
             if int(self.winoperator) in self.pickedtrio:
                 self.roundwin()
+            else:
+                self.roundloss()
+#6number
+        elif self.context == "sixnumbers":
+            if self.pickedsix == 1:
+                if int(self.winoperator) in self.lx1:
+                    self.roundwin()
+                else:
+                    self.roundloss()
+            elif self.pickedsix == 2:
+                print(self.lx2)
+                if int(self.winoperator) in self.lx2:
+                    self.roundwin()
+                else:
+                    self.roundloss()
+            elif int(self.winoperator) == 0:
+                self.roundnul()
             else:
                 self.roundloss()
 #dozens
@@ -544,17 +684,21 @@ class Game:
 #Gambling Mode Picker v1
         print("Which format do you want to gamble on ? ")
         print(" ")
-        print("[1] Single (1:36) | [2] Double (1:18) | [3] Triple (1:12) | [4] Square (1:9) | [5] Sixt (1:6) ")
+        print("[1] Single (1:36) | [2] Double (1:18) | [3] Triple (1:12) | [4] Square (1:9) | [5] Six (1:6) ")
         print(" ")
         print("[6] Dozen (1:3) | [7] Column (1:3) | [8] Half (1:2) | [9] Even/Odd (1:2) | [0] Color (1:2) ")
         print('--------------------------------------------------------------------------------------------------')
         if self.bet < self.mbx:
             print("Seems like you don't have enough tokens to play")
             print("You've lost today.")
+            return 'loss'
         else:
             pass
+
+        games = ("1, 2, 3, 4, 5, 6, 7, 8, 9, single, double, triple, six, square, sixt, dozen, even, odd, column, row, half, color")
+
         self.gamepicker = str(input()).lower()
-        while self.gamepicker is not 'null':
+        while self.gamepicker in games:
             if self.gamepicker in ("color, 0"):
                 self.colorpicker()
                 break
@@ -566,6 +710,11 @@ class Game:
                 break
             elif self.gamepicker in ("triple, 3"):
                 self.trionumpicker()
+                break
+            elif self.gamepicker in ("square, 4"):
+                print("Sorry squares are unavailable rn")
+            elif self.gamepicker in ("six, 5"):
+                self.sixnumpicker()
                 break
             elif self.gamepicker in ("dozen, 6"):
                 self.dozenpicker()
@@ -579,17 +728,28 @@ class Game:
             elif self.gamepicker in ("even, odd, 9"):
                 self.oddevenpicker()
                 break
-            else:
-                print(self.gamepicker)
+            elif self.gamepicker not in games:
                 print("Please chose a valid Gamemode")
-                self.gamepicker = input()
+                self.gamepicker = str(input()).lower()
+                break
+            else:
+                return "Error 404"
+            
 
     def guess_or_bet(self):
         """Load Game Function"""
 
         print("Please type your starting bet [Up to 100 Tokens]")
-        bet = input()
-        bet = float(bet)
+        bet = float(input())
+        while bet != 0:
+            if bet >= 1:
+                pass
+                break
+            else: 
+                print("Please enter a valid amount")
+                bet = float(input())
+                break
+
         if bet <= 10:
             self.bet = float(bet) * bonuses[0]
             print(Bannounce)
@@ -620,6 +780,7 @@ class Game:
                 self.currentRound()
                 self.usround()
                 self.endround == 0
+
             else:
                 print(self.endround)
                 print('error')
